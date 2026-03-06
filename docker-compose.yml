@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # The primary instance of Loom
+  loom-main:
+    build: .
+    container_name: loom-main
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file: .env
+    ports:
+      - "8080:8080"
+    environment:
+      - PB_HOSTNAME=loom-pocketbase
+    restart: unless-stopped
+    depends_on:
+      - pocketbase
+
+  # PocketBase Backend (The "Data Soul")
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: loom-pocketbase
+    networks:
+      default:
+        aliases:
+          - pocketbase
+    command:
+      - serve
+      - --http=0.0.0.0:8090
+      - --dir=/pb_data
+    volumes:
+      - ./pb_data:/pb_data
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
+
+  # The "Real App" (Live Production View)
+  loom-live:
+    image: nginx:alpine
+    container_name: loom-live
+    volumes:
+      - ./app/dist:/usr/share/nginx/html
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+    depends_on:
+      - loom-main

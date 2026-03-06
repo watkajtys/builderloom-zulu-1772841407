@@ -1,0 +1,9 @@
+google-generativeai
+pydantic
+rich
+psutil
+tenacity
+requests
+python-dotenv
+playwright
+pocketbase
