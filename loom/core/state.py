@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger("loom")
 STATE_FILE = Path("session_state.json")
+EXECUTION_STATE_FILE = Path("execution_state.json")
 
 class TaskPriority(int, Enum):
     P0_CRITICAL = 0
@@ -159,11 +160,29 @@ class ConductorState(BaseModel):
     def save(self):
         with _state_lock:
             self.prepare_ui_data()
+            
+            # Save Execution State independently
+            tmp_exec_file = EXECUTION_STATE_FILE.with_suffix(f'.tmp.{threading.get_ident()}.json')
+            try:
+                with open(tmp_exec_file, "w", encoding="utf-8") as f:
+                    # Use Pydantic's native JSON dump to safely serialize enums, datetimes, etc.
+                    f.write(self.model_dump_json(indent=2, include={'schema_version', 'ui_containers', 'ui_agents', 'ui_metrics'}))
+                os.replace(tmp_exec_file, EXECUTION_STATE_FILE)
+            except Exception as e:
+                print(f"Warning: Failed to save execution state to disk: {e}")
+            finally:
+                if tmp_exec_file.exists():
+                    try: os.remove(tmp_exec_file)
+                    except: pass
+            
             # Use a thread-specific temp file to prevent multiple threads from writing to the same file before replacing
             tmp_file = STATE_FILE.with_suffix(f'.tmp.{threading.get_ident()}.json')
             try:
                 with open(tmp_file, "w", encoding="utf-8") as f:
-                    f.write(self.model_dump_json(indent=2))
+                    # We no longer strictly need ui_* in the main file since we split it out,
+                    # but leaving it in `self.model_dump_json` is fine as legacy fields if needed
+                    # However, to strictly adhere to separating them, we could dump `exclude={'ui_containers', 'ui_agents', 'ui_metrics'}`
+                    f.write(self.model_dump_json(indent=2, exclude={'ui_containers', 'ui_agents', 'ui_metrics'}))
                 
                 # Windows specific: retry replace if file is locked
                 max_retries = 20

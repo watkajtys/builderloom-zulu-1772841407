@@ -4,14 +4,16 @@ export default function Header() {
   const location = useLocation();
 
   const getPageTitle = (pathname: string) => {
-    switch (pathname) {
-      case '/':
-        return 'Dashboard';
-      case '/agents':
-        return 'Agents';
-      default:
-        return 'Unknown Route';
-    }
+    if (pathname === '/') return 'Dashboard';
+    
+    // Remove leading slash and any trailing slash, then split by slash or dash
+    const cleanPath = pathname.replace(/^\/|\/$/g, '');
+    const segments = cleanPath.split(/[\/-]/);
+    
+    // Capitalize each word and join with a space
+    return segments
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   return (

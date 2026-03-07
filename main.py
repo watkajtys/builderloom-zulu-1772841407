@@ -135,7 +135,7 @@ def start_viewer_server():
             
         def do_GET(self):
             # Strictly allow only viewer assets and the state file
-            if not (self.path.startswith("/viewer") or self.path.startswith("/session_state.json")):
+            if not (self.path.startswith("/viewer") or self.path.startswith("/session_state.json") or self.path.startswith("/execution_state.json")):
                 self.send_error(403, "Forbidden")
                 return
             

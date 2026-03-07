@@ -8,7 +8,7 @@
   "current_iteration": 0,
   "active_branch": "main",
   "backlog": [],
-  "active_task_id": "TEST-123",
+  "active_task_id": "TEST-1772912137079",
   "inspiration_goal": "",
   "inspiration_target_route": "/",
   "inspiration_data_model": null,
@@ -25,56 +25,15 @@
   "current_phase": "Inspiration",
   "pending_steer": [],
   "steering_history": [],
-  "live_logs": [],
+  "live_logs": [
+    "[19:25:10] INFO: Configuring Git identity...",
+    "[19:25:10] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
+    "[19:25:10] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
+    "[19:25:42] INFO: Configuring Git identity...",
+    "[19:25:42] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
+    "[19:25:42] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive..."
+  ],
   "shutdown_requested": false,
   "update_scheduled": false,
-  "db_stats": {},
-  "ui_containers": [
-    {
-      "id": "1",
-      "name": "loom-pocketbase",
-      "status": "running",
-      "image": "pocketbase/pocketbase",
-      "ports": [
-        "8090:8090"
-      ]
-    },
-    {
-      "id": "2",
-      "name": "loom-python",
-      "status": "running",
-      "image": "python:3.11-slim",
-      "ports": [
-        "8080:8080"
-      ]
-    },
-    {
-      "id": "3",
-      "name": "loom-react",
-      "status": "running",
-      "image": "node:20-alpine",
-      "ports": [
-        "5173:5173"
-      ]
-    }
-  ],
-  "ui_agents": [
-    {
-      "agentId": "jules-alpha",
-      "state": "idle",
-      "currentTask": "Task TEST-123",
-      "happinessScore": 8
-    },
-    {
-      "agentId": "overseer-beta",
-      "state": "idle",
-      "currentTask": "Phase: Inspiration",
-      "happinessScore": 10
-    }
-  ],
-  "ui_metrics": {
-    "activeContainers": 3,
-    "agentCount": 2,
-    "systemHealth": 100
-  }
+  "db_stats": {}
 }

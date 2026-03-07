@@ -1,11 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchState } from '../services/api';
+import { executionQueryOptions } from './useOrchestration';
 
 export function useMetrics() {
   return useQuery({
-    queryKey: ['orchestrationState'],
-    queryFn: fetchState,
+    ...executionQueryOptions,
     select: (state) => state.ui_metrics,
-    refetchInterval: 5000,
   });
 }
