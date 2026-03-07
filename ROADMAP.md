@@ -23,8 +23,10 @@ Evolve BuilderLoom Zulu from a brittle, monolithic script into a robust, observa
 ### Phase 4: Human-in-the-Loop Interactivity (Steering)
 **Goal:** Allow human operators to easily course-correct the factory without SSHing into the VPS.
 - **Task:** Add a "Steering" command box to the React Viewer UI that submits text directives (e.g., "Stop working on UI and fix the DB first") to the backend API.
-- **Task:** Make the Kanban board fully interactive: users must be able to drag-and-drop to reorder tasks, click to edit task descriptions/prompts, and delete hallucinated tasks directly from the UI.
+- **Task:** Make the Kanban board fully interactive: users must be able to drag-and-drop to reorder tasks, click to edit task descriptions/prompts, delete hallucinated tasks, and manually inject custom P0_CRITICAL tasks directly from the UI.
 - **Task:** Add an editable "Roadmap" tab to the Viewer UI so the overarching product vision can be updated on the fly.
+- **Task:** Implement "Approval Gates" in overseer.py and the UI. Allow users to toggle a mode where the factory pauses after the Design and Validation phases to wait for a human "Approve" or "Reject" click.
+- **Task:** Add "Abort" and "Retry" buttons to the active task view. "Abort" immediately kills the process and reverts the branch. "Retry" clears the iteration history and forces Jules to start over from attempt 1.
 
 ### Phase 5: Self-Healing & Rollbacks
 **Goal:** Prevent the factory from getting stuck in infinite failure loops.
