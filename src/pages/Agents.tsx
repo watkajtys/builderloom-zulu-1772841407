@@ -1,8 +1,9 @@
 import { useOrchestration } from '../hooks/useOrchestration';
-import { Users, Loader2 } from 'lucide-react';
+import AgentList from '../components/domain/AgentList';
+import { Loader2, AlertCircle } from 'lucide-react';
 
 export default function Agents() {
-  const { agents, loading } = useOrchestration();
+  const { agents, loading, error } = useOrchestration();
 
   if (loading && !agents.length) {
     return (
@@ -19,44 +20,17 @@ export default function Agents() {
         <p className="text-slate-400 text-sm">Manage and inspect autonomous agent instances.</p>
       </div>
       
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
-        <div className="p-0">
-          <ul className="divide-y divide-slate-800">
-            {agents.map((agent) => (
-              <li key={agent.agentId} className="p-6 hover:bg-slate-800/50 transition-colors">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/30">
-                      <Users size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-mono text-lg font-bold text-slate-200">{agent.agentId}</h3>
-                      <div className="flex gap-2 mt-1">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-widest uppercase bg-slate-950 text-slate-400 border border-slate-800">
-                          {agent.state}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-slate-500 uppercase font-mono mb-1">Happiness</p>
-                    <p className="text-xl font-bold text-emerald-400">{agent.happinessScore}/10</p>
-                  </div>
-                </div>
-                
-                {agent.currentTask && (
-                  <div className="bg-slate-950 p-4 rounded-lg border border-slate-800">
-                    <p className="text-xs text-slate-500 font-mono mb-2 uppercase tracking-widest">Current Task</p>
-                    <p className="text-sm text-slate-300 font-mono">
-                      {agent.currentTask}
-                    </p>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4 flex items-start gap-3 text-red-400">
+          <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
+          <div>
+            <h3 className="text-sm font-semibold">Orchestration Error</h3>
+            <p className="text-xs text-red-400/80 mt-1">{error}</p>
+          </div>
         </div>
-      </div>
+      )}
+
+      <AgentList agents={agents} compact={false} />
     </div>
   );
 }

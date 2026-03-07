@@ -7,12 +7,14 @@ export function useOrchestration() {
   const [agents, setAgents] = useState<AgentStatus[]>([]);
   const [metrics, setMetrics] = useState<OrchestrationMetrics | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
     async function loadData() {
       setLoading(true);
+      setError(null);
       try {
         const [c, a, m] = await Promise.all([
           fetchContainers(),
@@ -25,8 +27,11 @@ export function useOrchestration() {
           setAgents(a);
           setMetrics(m);
         }
-      } catch (error) {
-        console.error('Failed to load orchestration data', error);
+      } catch (err) {
+        if (mounted) {
+          setError('Failed to load orchestration data from the factory.');
+          console.error('Failed to load orchestration data', err);
+        }
       } finally {
         if (mounted) setLoading(false);
       }
@@ -43,5 +48,5 @@ export function useOrchestration() {
     };
   }, []);
 
-  return { containers, agents, metrics, loading };
+  return { containers, agents, metrics, loading, error };
 }

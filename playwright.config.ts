@@ -8,12 +8,12 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://127.0.0.1:8080',
+    baseURL: 'http://127.0.0.1:5173',
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'MAX_RETRIES=1 BYPASS_OVERSEER=1 python3 main.py',
-    url: 'http://127.0.0.1:8080/viewer/',
+    command: 'npm run dev',
+    url: 'http://127.0.0.1:5173',
     reuseExistingServer: true,
     timeout: 120000,
   },

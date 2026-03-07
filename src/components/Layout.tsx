@@ -10,6 +10,11 @@ export default function Layout({ children }: { children: ReactNode }) {
     { name: 'Agents', path: '/agents', icon: Users },
   ];
 
+  const getPageTitle = (pathname: string) => {
+    const item = navItems.find((nav) => nav.path === pathname);
+    return item ? item.name : 'Unknown Route';
+  };
+
   return (
     <div className="flex h-screen bg-slate-950 text-slate-300 font-sans">
       {/* Sidebar */}
@@ -57,7 +62,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <main className="flex-1 flex flex-col overflow-hidden relative">
         <header className="h-16 border-b border-slate-800 bg-slate-900/30 flex items-center px-8 shrink-0 backdrop-blur-sm">
           <h2 className="text-lg font-semibold text-white capitalize">
-            {location.pathname === '/' ? 'Dashboard' : location.pathname.substring(1)}
+            {getPageTitle(location.pathname)}
           </h2>
         </header>
         <div className="flex-1 overflow-auto p-8">
