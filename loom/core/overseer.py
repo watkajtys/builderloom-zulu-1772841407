@@ -631,8 +631,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 self.state.save()
                 break
             except Exception as e:
-                logger.error(f"Critical loop error: {e}")
-                time.sleep(30)
+                import traceback
+                error_trace = traceback.format_exc()
+                logger.error(f"Critical loop error: {e}\n{error_trace}")
+                self.state.add_log(f"TELEMETRY_ERROR: Critical agent loop exception: {e}")
+                self.state.current_status = "CRITICAL_ERROR"
+                self.state.shutdown_requested = True
+                self.state.save()
+                break
 
     def _consume_steering(self):
         """Merges all pending steering notes into a single string, moves them to history, and clears the pending list."""

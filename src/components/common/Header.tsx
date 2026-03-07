@@ -4,16 +4,23 @@ export default function Header() {
   const location = useLocation();
 
   const getPageTitle = (pathname: string) => {
-    if (pathname === '/') return 'Dashboard';
+    // Exact route mapping prevents brittle behavior when dynamic parameters are added
+    const titles: Record<string, string> = {
+      '/': 'Dashboard',
+      '/agents': 'Agents'
+    };
     
-    // Remove leading slash and any trailing slash, then split by slash or dash
-    const cleanPath = pathname.replace(/^\/|\/$/g, '');
-    const segments = cleanPath.split(/[\/-]/);
+    if (titles[pathname]) {
+      return titles[pathname];
+    }
     
-    // Capitalize each word and join with a space
-    return segments
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+    // Fallback for unknown routes or future dynamic routes until they are added
+    const baseRoute = pathname.split('/')[1];
+    if (baseRoute) {
+      return baseRoute.charAt(0).toUpperCase() + baseRoute.slice(1);
+    }
+    
+    return 'Loom App';
   };
 
   return (

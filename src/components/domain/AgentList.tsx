@@ -1,4 +1,4 @@
-import { AgentStatus } from '../../types/orchestration';
+import { AgentStatus } from '../../types/agents';
 import AgentCard from './AgentCard';
 import CompactAgentCard from './CompactAgentCard';
 
