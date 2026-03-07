@@ -1,5 +1,6 @@
 import { AgentStatus } from '../../types/orchestration';
 import AgentCard from './AgentCard';
+import CompactAgentCard from './CompactAgentCard';
 
 interface AgentListProps {
   agents: AgentStatus[];
@@ -16,7 +17,7 @@ export default function AgentList({ agents, compact = false }: AgentListProps) {
         <div className="p-0">
           <ul className="divide-y divide-slate-800">
             {agents.map((agent) => (
-              <AgentCard key={agent.agentId} agent={agent} compact={true} />
+              <CompactAgentCard key={agent.agentId} agent={agent} />
             ))}
           </ul>
         </div>
@@ -29,7 +30,7 @@ export default function AgentList({ agents, compact = false }: AgentListProps) {
       <div className="p-0">
         <ul className="divide-y divide-slate-800">
           {agents.map((agent) => (
-            <AgentCard key={agent.agentId} agent={agent} compact={false} />
+            <AgentCard key={agent.agentId} agent={agent} />
           ))}
         </ul>
       </div>

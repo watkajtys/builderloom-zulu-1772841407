@@ -1,16 +1,13 @@
-import { useOrchestration } from '../hooks/useOrchestration';
+import { useAgents } from '../hooks/useAgents';
 import AgentList from '../components/domain/AgentList';
-import { Loader2, AlertCircle } from 'lucide-react';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import ErrorMessage from '../components/common/ErrorMessage';
 
 export default function Agents() {
-  const { agents, loading, error } = useOrchestration();
+  const { data: agents = [], isLoading, error } = useAgents();
 
-  if (loading && !agents.length) {
-    return (
-      <div className="flex items-center justify-center h-full text-blue-400">
-        <Loader2 className="animate-spin w-8 h-8" />
-      </div>
-    );
+  if (isLoading && !agents.length) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -21,13 +18,7 @@ export default function Agents() {
       </div>
       
       {error && (
-        <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4 flex items-start gap-3 text-red-400">
-          <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
-          <div>
-            <h3 className="text-sm font-semibold">Orchestration Error</h3>
-            <p className="text-xs text-red-400/80 mt-1">{error}</p>
-          </div>
-        </div>
+        <ErrorMessage message={(error as Error).message || "Failed to load orchestration data."} />
       )}
 
       <AgentList agents={agents} compact={false} />
