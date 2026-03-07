@@ -33,7 +33,7 @@ test('App fetches data independently avoiding useOrchestration god hook', async 
 
 test('Trigger an agentic state update and verify the generated state perfectly matches the new strictly versioned JSON schema without relying on React for logic.', async ({ page }) => {
   // Trigger state update directly via Python backend to ensure it's generated natively
-  execSync('python3 -c "from loom.core.state import ConductorState; state = ConductorState.load(); state.active_task_id = \'TEST-123\'; state.save()"');
+  execSync('python3 -c "from loom.core.state import ConductorState; state = ConductorState.load(); state.active_task_id = \'TEST-123\'; state.current_status = \'Active\'; state.save()"');
 
   // Read the state JSON file directly from the filesystem
   const statePath = path.resolve('session_state.json');
@@ -43,6 +43,15 @@ test('Trigger an agentic state update and verify the generated state perfectly m
   // Verify the schema version exists and is "1.0.0"
   expect(state.schema_version).toBe('1.0.0');
   expect(state.active_task_id).toBe('TEST-123');
+  
+  // Verify that the UI representation fields exist and are populated by Python
+  expect(state.ui_containers).toBeDefined();
+  expect(state.ui_agents).toBeDefined();
+  expect(state.ui_metrics).toBeDefined();
+  
+  // Verify a specific piece of the mapped data to prove domain logic is handled by backend
+  expect(state.ui_agents[0].currentTask).toBe('Task TEST-123');
+  expect(state.ui_metrics.agentCount).toBe(2);
 
   // Take screenshot as evidence
   await page.goto('/');

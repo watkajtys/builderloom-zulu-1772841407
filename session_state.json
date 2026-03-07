@@ -21,51 +21,60 @@
   "active_jules_prompt": null,
   "active_jules_url": null,
   "active_jules_action": null,
-  "current_status": "Idle",
+  "current_status": "Active",
   "current_phase": "Inspiration",
-  "pending_steer": [
-    "test note",
-    "test note",
-    "test note",
-    "test note"
-  ],
+  "pending_steer": [],
   "steering_history": [],
-  "live_logs": [
-    "[17:53:19] INFO: Configuring Git identity...",
-    "[17:53:19] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[17:53:19] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:00:28] INFO: Configuring Git identity...",
-    "[18:00:29] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:00:29] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:01:05] INFO: Configuring Git identity...",
-    "[18:01:05] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:01:05] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:02:24] INFO: Configuring Git identity...",
-    "[18:02:24] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:02:24] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:07:49] INFO: Configuring Git identity...",
-    "[18:07:49] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:07:49] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:17:16] INFO: Configuring Git identity...",
-    "[18:17:16] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:17:16] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:18:01] INFO: Configuring Git identity...",
-    "[18:18:01] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:18:01] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:29:01] INFO: Configuring Git identity...",
-    "[18:29:01] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:29:01] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:29:43] INFO: Configuring Git identity...",
-    "[18:29:43] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:29:43] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:30:14] INFO: Configuring Git identity...",
-    "[18:30:15] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:30:15] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[18:30:38] INFO: Configuring Git identity...",
-    "[18:30:38] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:30:38] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive..."
-  ],
+  "live_logs": [],
   "shutdown_requested": false,
   "update_scheduled": false,
-  "db_stats": {}
+  "db_stats": {},
+  "ui_containers": [
+    {
+      "id": "1",
+      "name": "loom-pocketbase",
+      "status": "running",
+      "image": "pocketbase/pocketbase",
+      "ports": [
+        "8090:8090"
+      ]
+    },
+    {
+      "id": "2",
+      "name": "loom-python",
+      "status": "running",
+      "image": "python:3.11-slim",
+      "ports": [
+        "8080:8080"
+      ]
+    },
+    {
+      "id": "3",
+      "name": "loom-react",
+      "status": "running",
+      "image": "node:20-alpine",
+      "ports": [
+        "5173:5173"
+      ]
+    }
+  ],
+  "ui_agents": [
+    {
+      "agentId": "jules-alpha",
+      "state": "idle",
+      "currentTask": "Task TEST-123",
+      "happinessScore": 8
+    },
+    {
+      "agentId": "overseer-beta",
+      "state": "idle",
+      "currentTask": "Phase: Inspiration",
+      "happinessScore": 10
+    }
+  ],
+  "ui_metrics": {
+    "activeContainers": 3,
+    "agentCount": 2,
+    "systemHealth": 100
+  }
 }

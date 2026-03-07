@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchContainers } from '../services/api';
+import { fetchState } from '../services/api';
 
 export function useContainers() {
   return useQuery({
-    queryKey: ['containers'],
-    queryFn: fetchContainers,
+    queryKey: ['orchestrationState'],
+    queryFn: fetchState,
+    select: (state) => state.ui_containers,
     refetchInterval: 5000,
   });
 }

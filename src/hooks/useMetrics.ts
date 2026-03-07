@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchSystemMetrics } from '../services/api';
+import { fetchState } from '../services/api';
 
 export function useMetrics() {
   return useQuery({
-    queryKey: ['metrics'],
-    queryFn: fetchSystemMetrics,
+    queryKey: ['orchestrationState'],
+    queryFn: fetchState,
+    select: (state) => state.ui_metrics,
     refetchInterval: 5000,
   });
 }

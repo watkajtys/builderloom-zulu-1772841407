@@ -113,8 +113,52 @@ class ConductorState(BaseModel):
     update_scheduled: bool = False
     db_stats: dict = {}
     
+    ui_containers: List[dict] = []
+    ui_agents: List[dict] = []
+    ui_metrics: dict = {}
+    
+    def prepare_ui_data(self):
+        system_health = 0 if self.shutdown_requested else 100
+        
+        self.ui_containers = [
+            { "id": "1", "name": "loom-pocketbase", "status": "running" if system_health > 0 else "stopped", "image": "pocketbase/pocketbase", "ports": ["8090:8090"] },
+            { "id": "2", "name": "loom-python", "status": "running", "image": "python:3.11-slim", "ports": ["8080:8080"] },
+            { "id": "3", "name": "loom-react", "status": "stopped" if self.shutdown_requested else "running", "image": "node:20-alpine", "ports": ["5173:5173"] }
+        ]
+        
+        agents = []
+        if self.active_jules_action or self.current_status == 'Active':
+            agents.append({
+                "agentId": "jules-alpha",
+                "state": "coding" if self.active_jules_action else "idle",
+                "currentTask": f"Task {self.active_task_id}" if self.active_task_id else self.current_phase,
+                "happinessScore": self.history[-1].happiness_score if self.history else 8
+            })
+        else:
+            agents.append({
+                "agentId": "jules-alpha",
+                "state": "idle",
+                "currentTask": "Waiting for task",
+                "happinessScore": 10
+            })
+            
+        agents.append({
+            "agentId": "overseer-beta",
+            "state": "reflecting" if self.current_phase == 'Reflection' else "idle",
+            "currentTask": f"Phase: {self.current_phase}",
+            "happinessScore": 10
+        })
+        self.ui_agents = agents
+        
+        self.ui_metrics = {
+            "activeContainers": 1 if self.shutdown_requested else 3,
+            "agentCount": 2,
+            "systemHealth": system_health
+        }
+
     def save(self):
         with _state_lock:
+            self.prepare_ui_data()
             # Use a thread-specific temp file to prevent multiple threads from writing to the same file before replacing
             tmp_file = STATE_FILE.with_suffix(f'.tmp.{threading.get_ident()}.json')
             try:

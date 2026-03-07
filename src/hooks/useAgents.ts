@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchAgentStatus } from '../services/api';
+import { fetchState } from '../services/api';
 
 export function useAgents() {
   return useQuery({
-    queryKey: ['agents'],
-    queryFn: fetchAgentStatus,
+    queryKey: ['orchestrationState'],
+    queryFn: fetchState,
+    select: (state) => state.ui_agents,
     refetchInterval: 5000,
   });
 }
