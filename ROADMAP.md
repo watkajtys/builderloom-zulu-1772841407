@@ -41,3 +41,8 @@ pm install from corrupting the Zulu instance itself.
 **Goal:** Prevent redundant LLM calls for code that hasn't changed.
 - **Task:** Implement AST hashing in the ArchitectAgent. If the dependency graph hash hasn't changed since the last run, skip the LLM call and return the cached score.
 - **Task:** Implement visual hashing in the VisionAgent. If the Playwright screenshot matches the previous screenshot by 99% structural similarity (SSIM), skip the LLM visual critique.
+
+### Phase 8: Long-Term Memory Retrieval (RAG)
+**Goal:** Fix the "amnesia" problem where Jules forgets architectural lessons after 3 iterations because the prompt sliding window pushes them out.
+- **Task:** Implement a basic Vector database lookup (or simple embedding search via chromadb or PocketBase) in overseer.py. 
+- **Task:** Instead of blindly passing the last 3 learnings from epo_memory into the Jules prompt, query the long-term loom_memory.json (or database) against the current task description to retrieve the 3 most *semantically relevant* past learnings.
