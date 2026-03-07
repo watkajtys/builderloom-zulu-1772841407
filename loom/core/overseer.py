@@ -420,12 +420,30 @@ test('App initializes correctly', async ({ page }) => {
         with open("app/src/index.css", "w") as f:
             f.write("@tailwind base;\n@tailwind components;\n@tailwind utilities;\n")
             
+        # Component directories
+        for d in ["components", "hooks", "services", "types", "pages"]:
+            os.makedirs(f"app/src/{d}", exist_ok=True)
+
+        with open("app/src/pages/Dashboard.tsx", "w") as f:
+            f.write("""export default function Dashboard() { return <div className="p-8"><h1 className="text-3xl font-bold">Dashboard</h1></div>; }""")
+            
+        with open("app/src/components/Layout.tsx", "w") as f:
+            f.write("""import { ReactNode } from 'react';\nimport { Link } from 'react-router-dom';\nexport default function Layout({ children }: { children: ReactNode }) { return <div className="min-h-screen bg-slate-950 text-white"><header className="p-4 border-b border-slate-800"><Link to="/">Loom Zulu</Link></header><main>{children}</main></div>; }""")
+
         with open("app/src/App.tsx", "w") as f:
-            f.write("""export default function App() {
+            f.write("""import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Dashboard from './pages/Dashboard';
+
+export default function App() {
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-      <h1 className="text-4xl font-bold">Loom Initialized</h1>
-    </div>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+        </Routes>
+      </Layout>
+    </Router>
   )
 }
 """)
