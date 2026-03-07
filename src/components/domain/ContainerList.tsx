@@ -1,4 +1,4 @@
-import { DockerContainer } from '../../types/orchestration';
+import { DockerContainer } from '../../types/infrastructure';
 
 interface ContainerListProps {
   containers: DockerContainer[];

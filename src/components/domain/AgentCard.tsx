@@ -1,4 +1,4 @@
-import { AgentStatus } from '../../types/orchestration';
+import { AgentStatus } from '../../types/agents';
 import { Users } from 'lucide-react';
 
 interface AgentCardProps {

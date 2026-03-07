@@ -1,4 +1,4 @@
-import { SessionState, ProductState, ExecutionState } from '../types/orchestration';
+import { SessionState, ProductState, ExecutionState } from '../types/product';
 
 export const fetchProductState = async (): Promise<ProductState> => {
   const response = await fetch('/session_state.json');
@@ -19,13 +19,7 @@ export const fetchExecutionState = async (): Promise<ExecutionState> => {
 export const fetchState = async (): Promise<SessionState> => {
   const [productState, executionState] = await Promise.all([
     fetchProductState(),
-    fetchExecutionState().catch(() => ({
-      // Provide fallback if execution state isn't written yet
-      schema_version: productState.schema_version || "1.0.0",
-      ui_containers: [],
-      ui_agents: [],
-      ui_metrics: { activeContainers: 0, agentCount: 0, systemHealth: 0 }
-    }))
+    fetchExecutionState()
   ]);
   
   return { ...productState, ...executionState } as SessionState;
