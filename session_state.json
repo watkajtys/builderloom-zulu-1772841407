@@ -1,4 +1,5 @@
 {
+  "schema_version": "1.0.0",
   "project_name": "Loom Experiment",
   "app_meta": "",
   "product_phase": "Phase 1: Core Loop MVP",
@@ -7,7 +8,7 @@
   "current_iteration": 0,
   "active_branch": "main",
   "backlog": [],
-  "active_task_id": null,
+  "active_task_id": "TEST-123",
   "inspiration_goal": "",
   "inspiration_target_route": "/",
   "inspiration_data_model": null,
@@ -22,7 +23,12 @@
   "active_jules_action": null,
   "current_status": "Idle",
   "current_phase": "Inspiration",
-  "pending_steer": [],
+  "pending_steer": [
+    "test note",
+    "test note",
+    "test note",
+    "test note"
+  ],
   "steering_history": [],
   "live_logs": [
     "[17:53:19] INFO: Configuring Git identity...",
@@ -45,7 +51,19 @@
     "[18:17:16] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
     "[18:18:01] INFO: Configuring Git identity...",
     "[18:18:01] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[18:18:01] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive..."
+    "[18:18:01] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
+    "[18:29:01] INFO: Configuring Git identity...",
+    "[18:29:01] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
+    "[18:29:01] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
+    "[18:29:43] INFO: Configuring Git identity...",
+    "[18:29:43] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
+    "[18:29:43] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
+    "[18:30:14] INFO: Configuring Git identity...",
+    "[18:30:15] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
+    "[18:30:15] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
+    "[18:30:38] INFO: Configuring Git identity...",
+    "[18:30:38] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
+    "[18:30:38] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive..."
   ],
   "shutdown_requested": false,
   "update_scheduled": false,

@@ -77,6 +77,7 @@ _global_state = None
 _state_lock = threading.RLock()
 
 class ConductorState(BaseModel):
+    schema_version: str = "1.0.0"
     project_name: str = "Loom Experiment"
     app_meta: str = ""
     product_phase: str = "Phase 1: Core Loop MVP"
