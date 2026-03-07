@@ -26,12 +26,13 @@ from datetime import datetime
 logger = logging.getLogger("loom")
 
 def db_doctor(pb_host="loom-pocketbase"):
+    if os.getenv("BYPASS_OVERSEER") == "1": return True
     """Ensures PocketBase superuser exists, waiting for container to be ready."""
     import subprocess
     import time
     logger.info(f"Configuring PocketBase Superuser on {pb_host}...")
     
-    max_retries = 15
+    max_retries = int(os.getenv("MAX_RETRIES", "15"))
     for i in range(max_retries):
         try:
             # First, check if the container is even running and responding to CLI
@@ -88,6 +89,7 @@ def git_doctor():
         return False
 
 def doctor():
+    if os.getenv("BYPASS_OVERSEER") == "1": return True
     """Validates the environment before starting."""
     logger.info("Running system check...")
     required_keys = ["GEMINI_API_KEY", "STITCH_API_KEY", "STITCH_PROJECT_ID"]
@@ -289,9 +291,18 @@ if __name__ == "__main__":
     viewer_thread.start()
     logger.info("[bold green]Observer Dashboard running at http://localhost:8080/viewer/[/bold green]", extra={"markup": True})
     
-    conductor = Overseer()
-    try:
-        conductor.loop()
-    except KeyboardInterrupt:
-        logger.info("Loom stopped by user.")
-        conductor.phoenix.kill()
+    if os.getenv("BYPASS_OVERSEER") == "1":
+        logger.info("BYPASS_OVERSEER is set. Keeping Viewer UI server alive...")
+        import time
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            logger.info("Loom Viewer Server stopped by user.")
+    else:
+        conductor = Overseer()
+        try:
+            conductor.loop()
+        except KeyboardInterrupt:
+            logger.info("Loom stopped by user.")
+            conductor.phoenix.kill()
