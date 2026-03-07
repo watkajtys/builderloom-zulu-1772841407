@@ -17,7 +17,7 @@ import os
 import argparse
 from loom.core.overseer import Overseer
 from loom.core.cleaner import clean_slate
-from loom.core.state import ConductorState
+from backend.state import ConductorState
 import threading
 import http.server
 import socketserver
@@ -133,19 +133,6 @@ def start_viewer_server():
             # We serve from root to allow access to session_state.json, but strictly filter in do_GET
             super().__init__(*args, **kwargs)
             
-        def do_GET(self):
-            # Strictly allow only viewer assets and the state file
-            if not (self.path.startswith("/viewer") or self.path.startswith("/session_state.json") or self.path.startswith("/execution_state.json")):
-                self.send_error(403, "Forbidden")
-                return
-            
-            # Explicitly block any directory traversal or sensitive files just in case
-            if ".." in self.path or ".env" in self.path or ".py" in self.path or ".git" in self.path:
-                self.send_error(403, "Forbidden")
-                return
-                
-            super().do_GET()
-
         def log_message(self, format, *args):
             pass
             
@@ -222,6 +209,45 @@ def start_viewer_server():
 
             self.send_response(400)
             self.end_headers()
+
+        def do_GET(self):
+            if self.path == "/api/logs/stream":
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/event-stream')
+                self.send_header('Cache-Control', 'no-cache')
+                self.send_header('Connection', 'keep-alive')
+                self.end_headers()
+                
+                last_index = 0
+                import json
+                
+                try:
+                    while True:
+                        state = ConductorState.load()
+                        logs = state.live_logs
+                        
+                        if len(logs) > last_index:
+                            new_logs = logs[last_index:]
+                            last_index = len(logs)
+                            data = json.dumps(new_logs)
+                            self.wfile.write(f"data: {data}\n\n".encode('utf-8'))
+                            self.wfile.flush()
+                        
+                        import time
+                        time.sleep(0.5)
+                except (BrokenPipeError, ConnectionResetError):
+                    pass
+                return
+
+            if not (self.path.startswith("/viewer") or self.path.startswith("/session_state.json") or self.path.startswith("/execution_state.json")):
+                self.send_error(403, "Forbidden")
+                return
+            
+            if ".." in self.path or ".env" in self.path or ".py" in self.path or ".git" in self.path:
+                self.send_error(403, "Forbidden")
+                return
+                
+            super().do_GET()
 
     class ThreadingTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
         allow_reuse_address = True

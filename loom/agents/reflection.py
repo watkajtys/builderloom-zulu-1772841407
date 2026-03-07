@@ -10,7 +10,7 @@ from google.api_core import exceptions
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 from loom.agents.base import AgentProxy
-from loom.core.state import BacklogTask
+from backend.state import BacklogTask
 
 logger = logging.getLogger("loom")
 

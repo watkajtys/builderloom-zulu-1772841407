@@ -16,7 +16,7 @@ from google.api_core import exceptions
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 from dotenv import load_dotenv
 
-from loom.core.state import ConductorState, LoopIteration, AttemptRecord, BacklogTask, TaskType
+from backend.state import ConductorState, LoopIteration, AttemptRecord, BacklogTask, TaskType
 from loom.environment.git import GitClient
 from loom.environment.phoenix import PhoenixServer
 from loom.agents.stitch import StitchClient, StitchQuotaError
@@ -1423,7 +1423,7 @@ Example output:
         # If we failed to reach happiness after all attempts, push the remaining debt to the backlog
         if self.happiness_score < 8 and final_refactoring_priorities:
             import uuid
-            from loom.core.state import TaskPriority, TaskType
+            from backend.state import TaskPriority, TaskType
             for p in final_refactoring_priorities:
                 p_int = p.get('priority', 1)
                 t_prio = TaskPriority.P0_CRITICAL if p_int == 0 else (TaskPriority.P2_NORMAL if p_int == 2 else TaskPriority.P1_HIGH)
@@ -1595,7 +1595,7 @@ CRITICAL RULES:
                     # Generate a P0 Bugfix task if not already in a bugfix
                     if active_task.type != "bugfix":
                         import uuid
-                        from loom.core.state import TaskPriority, TaskType
+                        from backend.state import TaskPriority, TaskType
                         bugfix_task = BacklogTask(
                             id=f"BUGFIX-{uuid.uuid4().hex[:6].upper()}",
                             type=TaskType.BUGFIX,
