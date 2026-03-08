@@ -8,7 +8,7 @@
   "current_iteration": 0,
   "active_branch": "main",
   "backlog": [],
-  "active_task_id": "TEST-1772913255694",
+  "active_task_id": "TEST-1772932823601",
   "inspiration_goal": "",
   "inspiration_target_route": "/",
   "inspiration_data_model": null,
@@ -25,17 +25,7 @@
   "current_phase": "Inspiration",
   "pending_steer": [],
   "steering_history": [],
-  "live_logs": [
-    "[19:25:10] INFO: Configuring Git identity...",
-    "[19:25:10] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[19:25:10] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[19:25:42] INFO: Configuring Git identity...",
-    "[19:25:42] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[19:25:42] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive...",
-    "[19:50:07] INFO: Configuring Git identity...",
-    "[19:50:07] INFO: Observer Dashboard running at http://localhost:8080/viewer/",
-    "[19:50:07] INFO: BYPASS_OVERSEER is set. Keeping Viewer UI server alive..."
-  ],
+  "live_logs": [],
   "shutdown_requested": false,
   "update_scheduled": false,
   "db_stats": {}

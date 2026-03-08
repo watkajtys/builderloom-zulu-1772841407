@@ -239,7 +239,37 @@ def start_viewer_server():
                     pass
                 return
 
-            if not (self.path.startswith("/viewer") or self.path.startswith("/session_state.json") or self.path.startswith("/execution_state.json")):
+            if self.path == "/api/session_state":
+                try:
+                    state = ConductorState.load()
+                    # Exporting as dict and filtering
+                    session_json = state.model_dump_json(exclude={'ui_containers', 'ui_agents', 'ui_metrics'})
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(session_json.encode('utf-8'))
+                    return
+                except Exception as e:
+                    logger.error(f"Failed to serve session state: {e}")
+                    self.send_error(500, "Internal Server Error")
+                    return
+
+            if self.path == "/api/execution_state":
+                try:
+                    state = ConductorState.load()
+                    # Only the UI components
+                    exec_json = state.model_dump_json(include={'schema_version', 'ui_containers', 'ui_agents', 'ui_metrics'})
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(exec_json.encode('utf-8'))
+                    return
+                except Exception as e:
+                    logger.error(f"Failed to serve execution state: {e}")
+                    self.send_error(500, "Internal Server Error")
+                    return
+
+            if not self.path.startswith("/viewer"):
                 self.send_error(403, "Forbidden")
                 return
             

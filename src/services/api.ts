@@ -1,19 +1,35 @@
-import { SessionState, ProductState, ExecutionState } from '../types/product';
+import { SessionState, ProductState, ExecutionState } from '../types/orchestration';
+
+const toCamelCase = (str: string) => str.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+
+const convertKeysToCamelCase = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    return obj.map(v => convertKeysToCamelCase(v));
+  } else if (obj !== null && obj.constructor === Object) {
+    return Object.keys(obj).reduce((result, key) => {
+      result[toCamelCase(key)] = convertKeysToCamelCase(obj[key]);
+      return result;
+    }, {} as any);
+  }
+  return obj;
+};
 
 export const fetchProductState = async (): Promise<ProductState> => {
-  const response = await fetch('/session_state.json');
+  const response = await fetch('/api/session_state');
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  return response.json();
+  const data = await response.json();
+  return convertKeysToCamelCase(data) as ProductState;
 };
 
 export const fetchExecutionState = async (): Promise<ExecutionState> => {
-  const response = await fetch('/execution_state.json');
+  const response = await fetch('/api/execution_state');
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  return response.json();
+  const data = await response.json();
+  return convertKeysToCamelCase(data) as ExecutionState;
 };
 
 export const fetchState = async (): Promise<SessionState> => {

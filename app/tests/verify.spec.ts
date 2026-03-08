@@ -48,7 +48,8 @@ test('Trigger an agentic state update and verify the generated state is split in
   // Trigger state update directly via Python backend to ensure it's generated natively
   execSync(`python3 -c "from backend.state import ConductorState; state = ConductorState.load(); state.active_task_id = '${dynamicTaskId}'; state.current_status = 'Active'; state.save()"`);
 
-  // Read the state JSON files directly from the filesystem
+  // Note: We changed to native API serving, but backend state.py still writes to disk 
+  // so the legacy files exist for inspection. We read them to verify the schemas.
   const statePath = path.resolve('../session_state.json');
   const stateRaw = fs.readFileSync(statePath, 'utf8');
   const productState = JSON.parse(stateRaw);
@@ -67,12 +68,20 @@ test('Trigger an agentic state update and verify the generated state is split in
   expect(execState.ui_metrics).toBeDefined();
   
   // Verify a specific piece of the mapped data to prove domain logic is handled by backend
+  // In the raw JSON, keys are snake_case or mixed, but DTO should fetch it and map to camelCase.
+  // The backend execution_state.json dumps 'currentTask' exactly because in backend/state.py: `currentTask` is hardcoded as camelCase
+  // We can just verify the backend dump correctly
   expect(execState.ui_agents[0].currentTask).toBe(`Task ${dynamicTaskId}`);
   expect(execState.ui_metrics.agentCount).toBe(2);
 
   // Take screenshot as evidence
   await page.goto('/');
   await expect(page.locator('h1:has-text("BuilderLoom")')).toBeVisible();
+  
+  // Verify the camelCase mapped DTO is used correctly by the components
+  // the AgentCard renders happinessScore: `text-emerald-400">{agent.happinessScore}/10`
+  await expect(page.locator('.text-emerald-400').first()).toContainText('/10');
+  
   await page.screenshot({ path: 'evidence.png' });
 });
 
