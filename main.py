@@ -131,6 +131,7 @@ def start_viewer_server():
     class QuietHandler(http.server.SimpleHTTPRequestHandler):
         def __init__(self, *args, **kwargs):
             # We serve from root to allow access to session_state.json, but strictly filter in do_GET
+            kwargs['directory'] = os.path.dirname(os.path.abspath(__file__))
             super().__init__(*args, **kwargs)
             
         def log_message(self, format, *args):
@@ -283,7 +284,7 @@ def start_viewer_server():
                 return
                 
             # If serving from the dist directory after Vite build
-            if self.path == "/" or self.path == "/viewer/" or self.path == "/agents" or self.path == "/viewer/agents" or self.path == "/index.html":
+            if self.path == "/" or self.path == "/viewer/" or self.path == "/agents" or self.path == "/viewer/agents" or self.path == "/index.html" or self.path == "/viewer/index.html":
                 self.path = "/dist/index.html"
             elif self.path.startswith("/assets/"):
                 self.path = "/dist" + self.path
