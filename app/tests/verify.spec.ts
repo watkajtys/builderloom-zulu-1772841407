@@ -76,7 +76,7 @@ test('Trigger an agentic state update and verify the generated state is split in
   
   // Verify the camelCase mapped DTO is used correctly by the components
   // the AgentCard renders happinessScore: `text-emerald-400">{agent.happinessScore}/10`
-  await expect(page.locator('.text-emerald-500').first()).toContainText('/10');
+  await expect(page.locator('.text-emerald-400').first()).toContainText('/10');
   
   await page.screenshot({ path: 'evidence.png' });
 });
