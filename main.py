@@ -269,13 +269,26 @@ def start_viewer_server():
                     self.send_error(500, "Internal Server Error")
                     return
 
-            if not self.path.startswith("/viewer"):
+            if self.path == "/" or self.path.startswith("/assets") or self.path == "/index.html":
+                # When serving built static files directly from root (like the vite build outputs)
+                pass
+            elif self.path == "/agents" or self.path == "/viewer/agents":
+                pass
+            elif not self.path.startswith("/viewer"):
                 self.send_error(403, "Forbidden")
                 return
             
             if ".." in self.path or ".env" in self.path or ".py" in self.path or ".git" in self.path:
                 self.send_error(403, "Forbidden")
                 return
+                
+            # If serving from the dist directory after Vite build
+            if self.path == "/" or self.path == "/viewer/" or self.path == "/agents" or self.path == "/viewer/agents" or self.path == "/index.html":
+                self.path = "/dist/index.html"
+            elif self.path.startswith("/assets/"):
+                self.path = "/dist" + self.path
+            elif self.path.startswith("/viewer/assets/"):
+                self.path = "/dist/assets/" + self.path[len("/viewer/assets/"):]
                 
             super().do_GET()
 

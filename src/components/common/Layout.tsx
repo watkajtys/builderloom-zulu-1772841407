@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import Sidebar from './common/Sidebar';
-import Header from './common/Header';
+import Sidebar from './Sidebar';
+import Header from './Header';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

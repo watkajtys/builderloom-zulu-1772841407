@@ -1,7 +1,7 @@
 import { useContainers } from '../hooks/useContainers';
 import { useAgents } from '../hooks/useAgents';
 import { useMetrics } from '../hooks/useMetrics';
-import StatCard from '../components/StatCard';
+import StatCard from '../components/common/StatCard';
 import ContainerList from '../components/domain/ContainerList';
 import AgentList from '../components/domain/AgentList';
 import LoadingSpinner from '../components/common/LoadingSpinner';

@@ -4,6 +4,6 @@ import { executionQueryOptions } from './useOrchestration';
 export function useMetrics() {
   return useQuery({
     ...executionQueryOptions,
-    select: (state) => state.ui_metrics,
+    select: (state) => state.uiMetrics,
   });
 }

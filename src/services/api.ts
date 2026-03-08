@@ -2,14 +2,14 @@ import { SessionState, ProductState, ExecutionState } from '../types/orchestrati
 
 const toCamelCase = (str: string) => str.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
 
-const convertKeysToCamelCase = (obj: any): any => {
+const convertKeysToCamelCase = (obj: unknown): unknown => {
   if (Array.isArray(obj)) {
     return obj.map(v => convertKeysToCamelCase(v));
   } else if (obj !== null && obj.constructor === Object) {
-    return Object.keys(obj).reduce((result, key) => {
-      result[toCamelCase(key)] = convertKeysToCamelCase(obj[key]);
+    return Object.keys(obj as Record<string, unknown>).reduce((result, key) => {
+      result[toCamelCase(key)] = convertKeysToCamelCase((obj as Record<string, unknown>)[key]);
       return result;
-    }, {} as any);
+    }, {} as Record<string, unknown>);
   }
   return obj;
 };

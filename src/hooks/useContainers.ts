@@ -4,6 +4,6 @@ import { executionQueryOptions } from './useOrchestration';
 export function useContainers() {
   return useQuery({
     ...executionQueryOptions,
-    select: (state) => state.ui_containers,
+    select: (state) => state.uiContainers,
   });
 }

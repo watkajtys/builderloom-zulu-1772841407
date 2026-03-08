@@ -7,11 +7,19 @@ export default function Header() {
     // Exact route mapping prevents brittle behavior when dynamic parameters are added
     const titles: Record<string, string> = {
       '/': 'Dashboard',
-      '/agents': 'Agents'
+      '/viewer/': 'Dashboard',
+      '/agents': 'Agents',
+      '/viewer/agents': 'Agents',
     };
     
+    // Exact matches
     if (titles[pathname]) {
       return titles[pathname];
+    }
+    
+    // Handling trailing slashes
+    if (pathname.endsWith('/') && titles[pathname.slice(0, -1)]) {
+      return titles[pathname.slice(0, -1)];
     }
     
     // Fallback for unknown routes or future dynamic routes until they are added

@@ -46,7 +46,7 @@ test('Trigger an agentic state update and verify the generated state is split in
   const dynamicTaskId = `TEST-${Date.now()}`;
   
   // Trigger state update directly via Python backend to ensure it's generated natively
-  execSync(`python3 -c "from backend.state import ConductorState; state = ConductorState.load(); state.active_task_id = '${dynamicTaskId}'; state.current_status = 'Active'; state.save()"`);
+  execSync(`python3 -m pip install pydantic pytest && PYTHONPATH=.. python3 -c "from backend.state import ConductorState; state = ConductorState.load(); state.active_task_id = '${dynamicTaskId}'; state.current_status = 'Active'; state.save()"`, { cwd: path.resolve('..') });
 
   // Note: We changed to native API serving, but backend state.py still writes to disk 
   // so the legacy files exist for inspection. We read them to verify the schemas.
@@ -132,7 +132,7 @@ except Exception as e:
   fs.writeFileSync('test_fault.py', pyScript);
   
   // Run the script.
-  execSync('python3 test_fault.py');
+  execSync('python3 -m pip install pydantic pytest && PYTHONPATH=.. python3 test_fault.py', { cwd: path.resolve('..') });
   
   // Read state and verify
   const statePath = path.resolve('../session_state.json');
